@@ -1,0 +1,19 @@
+uuid: 31b9a238-794a-449c-af7f-619a1a75db4e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_actor
+field_name: field_actor
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

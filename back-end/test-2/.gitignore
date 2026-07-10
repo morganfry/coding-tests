@@ -1,0 +1,11 @@
+.idea/
+/vendor
+/web/core
+/web/modules/contrib
+/web/profiles/contrig
+/web/themes/contrib
+/web/sites/default/files/php
+/web/sites/default/files/css
+/web/sites/default/files/js
+/web/sites/default/files/.htaccess
+/web/sites/default/files/sync/.htaccess

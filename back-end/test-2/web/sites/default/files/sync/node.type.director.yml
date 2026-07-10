@@ -1,0 +1,18 @@
+uuid: 4dc32305-b21b-4644-9385-ed42a82bc5c7
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: Director
+type: director
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

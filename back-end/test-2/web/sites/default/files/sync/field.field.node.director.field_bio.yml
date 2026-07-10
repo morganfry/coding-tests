@@ -1,0 +1,26 @@
+uuid: dad1b629-3cee-495a-a15c-31bc248b4481
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bio
+    - filter.format.full_html
+    - node.type.director
+  module:
+    - text
+id: node.director.field_bio
+field_name: field_bio
+entity_type: node
+bundle: director
+label: Bio
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats:
+    - full_html
+field_type: text_with_summary

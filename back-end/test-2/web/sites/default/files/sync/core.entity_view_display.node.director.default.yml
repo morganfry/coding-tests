@@ -1,0 +1,28 @@
+uuid: b399bff5-fed6-4045-a4db-32dc4d08d8a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.director.field_bio
+    - node.type.director
+  module:
+    - text
+    - user
+id: node.director.default
+targetEntityType: node
+bundle: director
+mode: default
+content:
+  field_bio:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

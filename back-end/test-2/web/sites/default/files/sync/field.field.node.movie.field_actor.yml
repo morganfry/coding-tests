@@ -1,0 +1,29 @@
+uuid: b0ba76c6-f53a-4562-90d5-f75d2b445449
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_actor
+    - node.type.actor
+    - node.type.movie
+id: node.movie.field_actor
+field_name: field_actor
+entity_type: node
+bundle: movie
+label: Actor
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      actor: actor
+    sort:
+      field: title
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

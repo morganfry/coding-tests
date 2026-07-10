@@ -1,0 +1,28 @@
+uuid: dc23d953-18ce-44d1-8817-4215ec95a60a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.actor.field_bio
+    - node.type.actor
+  module:
+    - text
+    - user
+id: node.actor.default
+targetEntityType: node
+bundle: actor
+mode: default
+content:
+  field_bio:
+    type: text_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }
