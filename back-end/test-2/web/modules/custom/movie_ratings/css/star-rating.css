@@ -1,0 +1,46 @@
+/**
+ * @file
+ * Styles for the movie rating star control.
+ */
+
+.movie-rating-form {
+  margin: 1rem 0;
+}
+
+.movie-rating-stars {
+  display: inline-flex;
+  gap: 0.15em;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.movie-rating-stars__star {
+  padding: 0 0.05em;
+  border: 0;
+  background: none;
+  color: #f5b301;
+  font-size: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.movie-rating-stars__star:focus {
+  outline: 2px solid #1b70ba;
+  outline-offset: 2px;
+}
+
+.movie-rating-form__thanks {
+  font-weight: 700;
+  color: #1a7f37;
+}
+
+/* Local fallback for the visually-hidden helper when the theme lacks it. */
+.movie-rating-form .visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+}
