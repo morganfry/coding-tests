@@ -8,6 +8,7 @@ dependencies:
     - comment
     - contact
     - filter
+    - movie_ratings
     - search
     - system
 _core:
@@ -21,4 +22,5 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'search content'
+  - 'submit movie ratings'
   - 'use text format restricted_html'

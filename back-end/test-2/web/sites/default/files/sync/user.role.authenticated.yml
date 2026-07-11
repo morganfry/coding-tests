@@ -9,6 +9,7 @@ dependencies:
     - contact
     - file
     - filter
+    - movie_ratings
     - search
     - shortcut
     - system
@@ -27,4 +28,5 @@ permissions:
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
+  - 'submit movie ratings'
   - 'use text format basic_html'
