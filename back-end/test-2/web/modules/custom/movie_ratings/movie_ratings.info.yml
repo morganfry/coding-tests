@@ -1,0 +1,9 @@
+name: 'Movie Ratings'
+type: module
+description: 'Lets visitors rate movies 1–5 stars on the movie page; each vote is stored as a Views-exposed content entity with the submitter''s IP.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:field
+  - drupal:user

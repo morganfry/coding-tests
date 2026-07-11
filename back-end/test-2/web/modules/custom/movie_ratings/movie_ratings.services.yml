@@ -1,0 +1,7 @@
+services:
+  movie_ratings.rating_manager:
+    class: Drupal\movie_ratings\RatingManager
+    arguments:
+      - '@entity_type.manager'
+      - '@request_stack'
+      - '@current_user'

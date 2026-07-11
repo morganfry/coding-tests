@@ -1,0 +1,7 @@
+'submit movie ratings':
+  title: 'Submit movie ratings'
+  description: 'Rate movies from the movie page.'
+'administer movie ratings':
+  title: 'Administer movie ratings'
+  description: 'View and manage submitted movie ratings.'
+  restrict access: true

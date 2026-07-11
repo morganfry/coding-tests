@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for the Movie Ratings module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function movie_ratings_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name === 'help.page.movie_ratings') {
+    $output = '<h3>' . t('About') . '</h3>';
+    $output .= '<p>' . t("Provides a \"Movie rating\" field that renders an interactive 1–5 star rating control on a movie page. Each submitted vote is saved as a movie_rating content entity together with the submitter's IP address.") . '</p>';
+    return $output;
+  }
+}
