@@ -759,6 +759,13 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 // Automatically generated include for settings managed by ddev.
 if (file_exists(__DIR__ . '/settings.ddev.php') && getenv('IS_DDEV_PROJECT') == 'true') {
   include __DIR__ . '/settings.ddev.php';
+
+  // Trust DDEV's router as a reverse proxy so the real client IP is read from
+  // the X-Forwarded-For header. The movie_ratings module uses this to record
+  // and deduplicate anonymous votes by IP. Only the ddev-router talks to the
+  // web container, so trusting the immediate upstream is safe here.
+  $settings['reverse_proxy'] = TRUE;
+  $settings['reverse_proxy_addresses'] = [$_SERVER['REMOTE_ADDR'] ?? ''];
 }
 
 /**
