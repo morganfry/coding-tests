@@ -22,4 +22,18 @@ interface RatingManagerInterface {
    */
   public function recordRating(int $nid, int $rating): void;
 
+  /**
+   * Determines whether the current user has already rated a movie.
+   *
+   * Authenticated users are matched by user ID; anonymous users are matched by
+   * the request IP address.
+   *
+   * @param int $nid
+   *   The movie node ID.
+   *
+   * @return bool
+   *   TRUE if a rating already exists for the current user, FALSE otherwise.
+   */
+  public function hasRated(int $nid): bool;
+
 }

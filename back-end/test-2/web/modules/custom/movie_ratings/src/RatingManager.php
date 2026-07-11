@@ -44,4 +44,25 @@ class RatingManager implements RatingManagerInterface {
     ])->save();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function hasRated(int $nid): bool {
+    $query = $this->entityTypeManager->getStorage('movie_rating')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('movie', $nid)
+      ->range(0, 1);
+
+    if ($this->currentUser->isAuthenticated()) {
+      $query->condition('uid', $this->currentUser->id());
+    }
+    else {
+      $request = $this->requestStack->getCurrentRequest();
+      $query->condition('uid', 0);
+      $query->condition('ip_address', $request !== NULL ? (string) $request->getClientIp() : '');
+    }
+
+    return (bool) $query->count()->execute();
+  }
+
 }

@@ -21,7 +21,7 @@ final class RatingForm extends FormBase {
    *   The rating manager.
    */
   public function __construct(
-    protected readonly RatingManagerInterface $ratingManager,
+    protected RatingManagerInterface $ratingManager,
   ) {}
 
   /**
@@ -61,9 +61,18 @@ final class RatingForm extends FormBase {
     $form['#prefix'] = '<div id="' . $wrapper_id . '" class="movie-rating-form">';
     $form['#suffix'] = '</div>';
 
-    if ($form_state->get('rated')) {
-      $form['thanks'] = [
+    // Inline feedback shown after a submit. Kept as a form-state flag (rather
+    // than the global messenger) so it renders inside the AJAX-replaced wrapper
+    // and never captures unrelated page messages.
+    $feedback = $form_state->get('feedback');
+    if ($feedback === 'thanks') {
+      $form['feedback'] = [
         '#markup' => '<p class="movie-rating-form__thanks">' . $this->t('Thanks for rating!') . '</p>',
+      ];
+    }
+    elseif ($feedback === 'already') {
+      $form['feedback'] = [
+        '#markup' => '<p class="movie-rating-form__notice">' . $this->t('You have already rated this movie.') . '</p>',
       ];
     }
 
@@ -80,6 +89,8 @@ final class RatingForm extends FormBase {
       '#required' => TRUE,
     ];
 
+    // The submit button is always present so the AJAX framework can always
+    // resolve the triggering element, even on a repeat submit.
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['submit'] = [
       '#type' => 'submit',
@@ -113,11 +124,17 @@ final class RatingForm extends FormBase {
     $nid = (int) $form_state->get('movie_nid');
     $rating = (int) $form_state->getValue('rating');
     if ($nid > 0) {
-      $this->ratingManager->recordRating($nid, $rating);
-      $form_state->set('rated', TRUE);
+      // Only one rating per user (by account, or by IP when anonymous).
+      if ($this->ratingManager->hasRated($nid)) {
+        $form_state->set('feedback', 'already');
+      }
+      else {
+        $this->ratingManager->recordRating($nid, $rating);
+        $form_state->set('feedback', 'thanks');
+      }
     }
-    // Rebuild so the confirmation shows (and so no page reload is required when
-    // JavaScript is enabled).
+    // Rebuild (rather than redirect) so the inline feedback shows without a
+    // page reload; the stable form structure keeps the AJAX callback callable.
     $form_state->setRebuild(TRUE);
   }
 

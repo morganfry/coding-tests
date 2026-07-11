@@ -57,8 +57,8 @@ final class MovieRatingFormFormatter extends FormatterBase implements ContainerF
     $label,
     $view_mode,
     array $third_party_settings,
-    protected readonly FormBuilderInterface $formBuilder,
-    protected readonly AccountInterface $currentUser,
+    protected FormBuilderInterface $formBuilder,
+    protected AccountInterface $currentUser,
   ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }

@@ -34,6 +34,11 @@
   color: #1a7f37;
 }
 
+.movie-rating-form__notice {
+  font-weight: 700;
+  color: #8a6d00;
+}
+
 /* Local fallback for the visually-hidden helper when the theme lacks it. */
 .movie-rating-form .visually-hidden {
   position: absolute !important;
