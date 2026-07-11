@@ -1,0 +1,22 @@
+uuid: e8289c4b-2d01-4417-8fa5-9c192b614e28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_movie_rating
+    - node.type.movie
+  module:
+    - movie_ratings
+id: node.movie.field_movie_rating
+field_name: field_movie_rating
+entity_type: node
+bundle: movie
+label: Rating
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  max_stars: 5
+field_type: movie_rating
