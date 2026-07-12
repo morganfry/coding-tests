@@ -1,0 +1,11 @@
+uuid: 79ffd5ad-1790-4590-93ba-1ca0c55afa33
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.views_page
+label: 'views page'
+description: ''
+targetEntityType: node
+cache: true
