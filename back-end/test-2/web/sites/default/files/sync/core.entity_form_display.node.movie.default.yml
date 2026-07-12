@@ -8,9 +8,11 @@ dependencies:
     - field.field.node.movie.field_average_rating
     - field.field.node.movie.field_category
     - field.field.node.movie.field_director
+    - field.field.node.movie.field_trailer
     - field.field.node.movie.field_year_of_release
     - node.type.movie
   module:
+    - link
     - path
     - text
 id: node.movie.default
@@ -63,6 +65,14 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_trailer:
+    type: link_default
+    weight: 126
+    region: content
+    settings:
+      placeholder_url: 'https://www.youtube.com/watch?v=…'
+      placeholder_title: ''
     third_party_settings: {  }
   field_year_of_release:
     type: number

@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Displays a QR code linking to a movie's trailer.
+ *
+ * Available variables:
+ * - uri: The QR code image as a data URI.
+ * - url: The trailer URL, when the code should also be clickable. Empty
+ *   otherwise.
+ * - caption: Text shown with the code. May be empty.
+ * - size: The width and height of the code, in pixels.
+ * - alt: Alternative text for the image.
+ */
+#}
+<figure class="trailer-qr">
+  {% if url %}
+    <a class="trailer-qr__link" href="{{ url }}" target="_blank" rel="noopener noreferrer">
+      <img class="trailer-qr__image" src="{{ uri }}" alt="{{ alt }}" width="{{ size }}" height="{{ size }}">
+    </a>
+  {% else %}
+    <img class="trailer-qr__image" src="{{ uri }}" alt="{{ alt }}" width="{{ size }}" height="{{ size }}">
+  {% endif %}
+  {% if caption %}
+    <figcaption class="trailer-qr__caption">{{ caption }}</figcaption>
+  {% endif %}
+</figure>

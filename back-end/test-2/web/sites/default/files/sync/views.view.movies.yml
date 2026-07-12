@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.full
+    - core.entity_view_mode.node.views_page
     - node.type.movie
     - taxonomy.vocabulary.categories
   module:
@@ -347,7 +347,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: full
+          view_mode: views_page
       query:
         type: views_query
         options:

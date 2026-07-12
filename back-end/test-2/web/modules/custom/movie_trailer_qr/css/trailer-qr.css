@@ -1,0 +1,23 @@
+/**
+ * @file
+ * Styles for the trailer QR code.
+ */
+
+.trailer-qr {
+  display: inline-block;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.trailer-qr__image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.trailer-qr__caption {
+  margin-top: 0.5rem;
+  max-width: 20rem;
+  color: #545560;
+  font-size: 0.9rem;
+}

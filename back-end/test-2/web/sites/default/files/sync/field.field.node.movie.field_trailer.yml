@@ -1,0 +1,23 @@
+uuid: 6d49cbae-c9a0-4b4b-b059-cd9d8ac33c3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_trailer
+    - node.type.movie
+  module:
+    - link
+id: node.movie.field_trailer
+field_name: field_trailer
+entity_type: node
+bundle: movie
+label: Trailer
+description: 'The URL of this movie’s trailer on YouTube.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

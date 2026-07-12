@@ -1,0 +1,5 @@
+trailer_qr:
+  version: 1.0.x
+  css:
+    theme:
+      css/trailer-qr.css: {}

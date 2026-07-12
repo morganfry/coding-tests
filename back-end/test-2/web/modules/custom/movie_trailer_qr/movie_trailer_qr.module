@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for the Movie Trailer QR module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function movie_trailer_qr_help($route_name, RouteMatchInterface $route_match) {
+  if ($route_name === 'help.page.movie_trailer_qr') {
+    $output = '<h3>' . t('About') . '</h3>';
+    $output .= '<p>' . t('Provides a "Trailer QR code" display format for link fields. Add a link field to the movie content type for the trailer URL, then give that field this format on <em>Manage display</em> to show a scannable QR code on the movie page.') . '</p>';
+    $output .= '<p>' . t('The QR code is generated on the server and embedded in the page as a data URI, so showing it makes no request to any external service. Its size, caption and whether it also acts as a link are all display settings.') . '</p>';
+    return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function movie_trailer_qr_theme() {
+  return [
+    'trailer_qr_code' => [
+      'variables' => [
+        'uri' => '',
+        'url' => '',
+        'caption' => '',
+        'size' => 200,
+        'alt' => '',
+      ],
+    ],
+  ];
+}

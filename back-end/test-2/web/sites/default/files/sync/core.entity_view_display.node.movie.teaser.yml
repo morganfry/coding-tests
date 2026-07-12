@@ -9,6 +9,7 @@ dependencies:
     - field.field.node.movie.field_average_rating
     - field.field.node.movie.field_category
     - field.field.node.movie.field_director
+    - field.field.node.movie.field_trailer
     - field.field.node.movie.field_year_of_release
     - node.type.movie
   module:
@@ -32,5 +33,6 @@ hidden:
   field_actor: true
   field_category: true
   field_director: true
+  field_trailer: true
   field_year_of_release: true
   links: true

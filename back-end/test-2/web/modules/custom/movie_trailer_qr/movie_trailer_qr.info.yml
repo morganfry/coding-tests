@@ -1,0 +1,9 @@
+name: 'Movie Trailer QR'
+type: module
+description: 'Renders a link field as a scannable QR code, used to send visitors from a movie page to its YouTube trailer.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:node
+  - drupal:field
+  - drupal:link
