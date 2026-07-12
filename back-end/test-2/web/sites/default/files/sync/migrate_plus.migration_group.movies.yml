@@ -1,0 +1,19 @@
+uuid: 559d7881-ddd5-4182-a1fd-5401a75e7945
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - movie_migrate
+_core:
+  default_config_hash: 3wqtTB9Q4PUC8IcZuC23auuIuFpUsxOUKHaFOWXlJ68
+id: movies
+label: Movies
+description: 'The demo movie catalogue: category terms, directors, actors, movies and ratings.'
+source_type: 'JSON files shipped with the module'
+module: null
+shared_configuration:
+  dependencies:
+    enforced:
+      module:
+        - movie_migrate

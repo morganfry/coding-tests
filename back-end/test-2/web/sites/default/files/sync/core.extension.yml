@@ -28,6 +28,10 @@ module:
   link: 0
   menu_link_content: 0
   menu_ui: 0
+  migrate: 0
+  migrate_plus: 0
+  migrate_tools: 0
+  movie_migrate: 0
   movie_ratings: 0
   movie_trailer_qr: 0
   mysql: 0
