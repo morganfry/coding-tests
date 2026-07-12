@@ -1,0 +1,7 @@
+movie_ratings.settings:
+  path: '/admin/config/content/movie-ratings'
+  defaults:
+    _form: '\Drupal\movie_ratings\Form\SettingsForm'
+    _title: 'Movie ratings'
+  requirements:
+    _permission: 'administer movie ratings'

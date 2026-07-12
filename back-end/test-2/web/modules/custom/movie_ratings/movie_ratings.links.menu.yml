@@ -1,0 +1,5 @@
+movie_ratings.settings:
+  title: 'Movie ratings'
+  description: 'Configure flood control for the movie rating form.'
+  parent: system.admin_config_content
+  route_name: movie_ratings.settings
