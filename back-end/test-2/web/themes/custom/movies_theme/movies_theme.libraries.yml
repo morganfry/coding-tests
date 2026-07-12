@@ -1,0 +1,5 @@
+sidebar-left:
+  version: 1.0.x
+  css:
+    theme:
+      css/layout/sidebar-left.css: {}

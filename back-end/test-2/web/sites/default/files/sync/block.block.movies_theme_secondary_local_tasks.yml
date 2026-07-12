@@ -1,13 +1,13 @@
-uuid: 5f4a175b-0c50-4c4b-a7d5-6f5054cd63ca
+uuid: a58e3a7e-4a60-4030-9cc8-9238aa582888
 langcode: en
 status: true
 dependencies:
   theme:
-    - olivero
+    - movies_theme
 _core:
   default_config_hash: ydSxdq7R66I8UMC460rOzlfzvlUL4VRbdwc6z9DWaUI
-id: olivero_secondary_local_tasks
-theme: olivero
+id: movies_theme_secondary_local_tasks
+theme: movies_theme
 region: highlighted
 weight: -2
 provider: null

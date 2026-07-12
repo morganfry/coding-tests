@@ -1,4 +1,4 @@
-uuid: 150c5d4b-8701-49fd-9ee9-67998d0281c8
+uuid: 7a2ef5d7-e966-4254-8199-117e5b5b0f74
 langcode: en
 status: true
 dependencies:
@@ -6,9 +6,9 @@ dependencies:
     - movie_ratings
     - node
   theme:
-    - olivero
-id: movieratingsblock
-theme: olivero
+    - movies_theme
+id: movies_theme_movieratingsblock
+theme: movies_theme
 region: content
 weight: 10
 provider: null

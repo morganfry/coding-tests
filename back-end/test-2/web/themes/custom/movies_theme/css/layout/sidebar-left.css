@@ -1,0 +1,31 @@
+/**
+ * @file
+ * Moves Olivero's sidebar to the left of the main content.
+ *
+ * Olivero ships a single "sidebar" region and places it to the right: in
+ * core/themes/olivero/css/layout/layout-sidebar.css the content sits at
+ * grid-column 3 / 11 and the sidebar at 12 / 15. This mirrors that, so the
+ * top-rated and most-popular lists appear in a left sidebar.
+ *
+ * Only the wide breakpoint is overridden. Below it Olivero stacks the two
+ * regions full width, where "left" and "right" have no meaning.
+ */
+
+@media (min-width: 62.5rem) {
+
+  /*
+   * Both regions are pinned to the same grid row. Without this, the sidebar
+   * markup comes after the main element, so the grid auto-placement algorithm
+   * would push a left-hand sidebar down onto a second row rather than sitting
+   * it beside the content.
+   */
+  .sidebar-grid > .site-main {
+    grid-row: 1;
+    grid-column: 7 / 15;
+  }
+
+  .sidebar-grid .region--sidebar {
+    grid-row: 1;
+    grid-column: 3 / 6;
+  }
+}

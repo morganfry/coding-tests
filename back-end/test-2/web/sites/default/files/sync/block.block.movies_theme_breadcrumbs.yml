@@ -1,15 +1,15 @@
-uuid: 45ff86f8-5460-46af-b665-23131d43ff6e
+uuid: f77de496-775f-4d8f-abf7-279bf051122a
 langcode: en
 status: true
 dependencies:
   module:
     - system
   theme:
-    - olivero
+    - movies_theme
 _core:
   default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
-id: olivero_breadcrumbs
-theme: olivero
+id: movies_theme_breadcrumbs
+theme: movies_theme
 region: breadcrumb
 weight: 0
 provider: null

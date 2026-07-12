@@ -1,4 +1,4 @@
-uuid: 34793cc0-2147-46ef-b5b5-c37a253422ba
+uuid: 7f6deb49-bf77-45ff-b39b-9a33ee48582e
 langcode: en
 status: true
 dependencies:
@@ -7,9 +7,9 @@ dependencies:
   module:
     - views
   theme:
-    - olivero
-id: mostpopularmovies
-theme: olivero
+    - movies_theme
+id: movies_theme_mostpopularmovies
+theme: movies_theme
 region: sidebar
 weight: 0
 provider: null

@@ -1,4 +1,4 @@
-uuid: 236d3049-f6de-493f-90ce-8dc5eac807a1
+uuid: 8e87fd3f-c5eb-4fbf-835a-81385abac3e2
 langcode: en
 status: true
 dependencies:
@@ -7,9 +7,9 @@ dependencies:
   module:
     - views
   theme:
-    - olivero
-id: topratedmovies
-theme: olivero
+    - movies_theme
+id: movies_theme_topratedmovies
+theme: movies_theme
 region: sidebar
 weight: 1
 provider: null
