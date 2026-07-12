@@ -1,0 +1,13 @@
+field.formatter.settings.trailer_qr_code:
+  type: mapping
+  label: 'Trailer QR code formatter settings'
+  mapping:
+    size:
+      type: integer
+      label: 'Size'
+    caption:
+      type: label
+      label: 'Caption'
+    link_to_trailer:
+      type: boolean
+      label: 'Link the QR code to the trailer'

@@ -1,0 +1,3 @@
+flood:
+  limit: 10
+  interval: 3600

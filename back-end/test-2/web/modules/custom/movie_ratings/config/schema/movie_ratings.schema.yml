@@ -1,0 +1,49 @@
+movie_ratings.settings:
+  type: config_object
+  label: 'Movie ratings settings'
+  mapping:
+    flood:
+      type: mapping
+      label: 'Flood control'
+      mapping:
+        limit:
+          type: integer
+          label: 'Limit'
+        interval:
+          type: integer
+          label: 'Interval'
+
+block.settings.movie_ratings_block:
+  type: block_settings
+  label: 'Movie ratings block'
+  mapping:
+    max_stars:
+      type: integer
+      label: 'Maximum stars'
+
+field.formatter.settings.movie_rating_average:
+  type: mapping
+  label: 'Average rating stars formatter settings'
+  mapping:
+    max_stars:
+      type: integer
+      label: 'Maximum stars'
+
+field.storage_settings.movie_rating_average:
+  type: mapping
+  label: 'Movie rating average storage settings'
+
+field.field_settings.movie_rating_average:
+  type: mapping
+  label: 'Movie rating average field settings'
+
+field.value.movie_rating_average:
+  type: mapping
+  label: 'Default value'
+  mapping:
+    average:
+      type: float
+      label: 'Average rating'
+    votes:
+      type: integer
+      label: 'Number of votes'

@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Url;
 use Drupal\movie_ratings\Entity\MovieRatingInterface;
 use Drupal\node\NodeInterface;
 
@@ -18,6 +19,10 @@ function movie_ratings_help($route_name, RouteMatchInterface $route_match) {
     $output .= '<p>' . t("Provides a \"Movie ratings\" block that shows a movie's average rating as stars and offers visitors an interactive star rating form. Each submitted vote is saved as a movie_rating content entity together with the submitter's IP address.") . '</p>';
     $output .= '<p>' . t('A "Movie rating average" field on the content type stores each movie\'s average rating and vote count. The block renders it, and because it is a real field it is also available as a field, filter and sort in Views.') . '</p>';
     $output .= '<p>' . t('Place the block at <em>Structure → Block layout</em>, set the maximum number of stars in its settings, and limit it to movie pages with a "Content type" visibility condition.') . '</p>';
+    $output .= '<h3>' . t('Flood control') . '</h3>';
+    $output .= '<p>' . t('Submissions are rate limited per IP address to keep bots from stuffing the ballot. Configure how many ratings a visitor may submit, and over what period, at <a href=":settings">Movie ratings settings</a>. Users with the "Administer movie ratings" permission are not limited.', [
+      ':settings' => Url::fromRoute('movie_ratings.settings')->toString(),
+    ]) . '</p>';
     return $output;
   }
 }

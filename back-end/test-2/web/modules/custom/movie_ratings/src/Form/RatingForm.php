@@ -6,8 +6,10 @@ namespace Drupal\movie_ratings\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Flood\FloodInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\movie_ratings\RatingManagerInterface;
@@ -19,16 +21,27 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 final class RatingForm extends FormBase {
 
   /**
+   * The flood event name used to rate limit rating submissions.
+   */
+  private const FLOOD_EVENT = 'movie_ratings.submit';
+
+  /**
    * Constructs a RatingForm object.
    *
    * @param \Drupal\movie_ratings\RatingManagerInterface $ratingManager
    *   The rating manager.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager, used to re-render the movie's average rating.
+   * @param \Drupal\Core\Flood\FloodInterface $flood
+   *   The flood service, used to rate limit submissions.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
+   *   The date formatter, used to describe the flood window to the visitor.
    */
   public function __construct(
     protected RatingManagerInterface $ratingManager,
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected FloodInterface $flood,
+    protected DateFormatterInterface $dateFormatter,
   ) {}
 
   /**
@@ -38,6 +51,8 @@ final class RatingForm extends FormBase {
     return new self(
       $container->get('movie_ratings.rating_manager'),
       $container->get('entity_type.manager'),
+      $container->get('flood'),
+      $container->get('date.formatter'),
     );
   }
 
@@ -68,6 +83,15 @@ final class RatingForm extends FormBase {
     $wrapper_id = $this->wrapperId((int) $nid);
     $form['#prefix'] = '<div id="' . $wrapper_id . '" class="movie-rating-form">';
     $form['#suffix'] = '</div>';
+
+    // Validation errors are reported through the messenger, and the AJAX
+    // callback replaces only this wrapper. Without a messages element inside
+    // it, an error such as the flood limit being reached would be set but never
+    // shown to the visitor.
+    $form['status_messages'] = [
+      '#type' => 'status_messages',
+      '#weight' => -10,
+    ];
 
     // Inline feedback shown after a submit. Kept as a form-state flag (rather
     // than the global messenger) so it renders inside the AJAX-replaced wrapper
@@ -123,6 +147,21 @@ final class RatingForm extends FormBase {
     if ($rating < 1 || $rating > $max) {
       $form_state->setErrorByName('rating', $this->t('Please choose a rating between 1 and @max.', ['@max' => $max]));
     }
+
+    // Rate limit submissions per visitor, so a bot cannot work through the
+    // catalogue casting a vote on every movie. hasRated() already stops a
+    // second vote on the same movie; this caps the rate across all of them.
+    if (!$this->currentUser()->hasPermission('administer movie ratings')) {
+      $limit = $this->floodLimit();
+      $interval = $this->floodInterval();
+
+      if (!$this->flood->isAllowed(self::FLOOD_EVENT, $limit, $interval)) {
+        $form_state->setErrorByName('', $this->t('You cannot submit more than %limit ratings in @interval. Try again later.', [
+          '%limit' => $limit,
+          '@interval' => $this->dateFormatter->formatInterval($interval),
+        ]));
+      }
+    }
   }
 
   /**
@@ -131,6 +170,14 @@ final class RatingForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $nid = (int) $form_state->get('movie_nid');
     $rating = (int) $form_state->getValue('rating');
+
+    // Every submission counts against the limit, including one that is turned
+    // away below because the visitor already rated this movie: a bot hammering
+    // the form should be throttled whether or not its votes land. A submission
+    // that failed validation never reaches this method, so a visitor who is
+    // already flooded cannot extend their own lockout by retrying.
+    $this->flood->register(self::FLOOD_EVENT, $this->floodInterval());
+
     if ($nid > 0) {
       // Only one rating per user (by account, or by IP when anonymous).
       if ($this->ratingManager->hasRated($nid)) {
@@ -144,6 +191,26 @@ final class RatingForm extends FormBase {
     // Rebuild (rather than redirect) so the inline feedback shows without a
     // page reload; the stable form structure keeps the AJAX callback callable.
     $form_state->setRebuild(TRUE);
+  }
+
+  /**
+   * Gets the number of ratings a visitor may submit per time window.
+   *
+   * @return int
+   *   The configured flood limit.
+   */
+  private function floodLimit(): int {
+    return (int) $this->config('movie_ratings.settings')->get('flood.limit');
+  }
+
+  /**
+   * Gets the length of the flood time window.
+   *
+   * @return int
+   *   The configured flood interval, in seconds.
+   */
+  private function floodInterval(): int {
+    return (int) $this->config('movie_ratings.settings')->get('flood.interval');
   }
 
   /**
