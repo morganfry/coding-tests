@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for the Movie Migrate module.
+ */
+
+/**
+ * Implements hook_migration_plugins_alter().
+ *
+ * The migrations name their JSON source files relative to this module, e.g.
+ * "data/movies.json". migrate_plus's file data fetcher reads them with a plain
+ * file_get_contents(), which resolves a relative path against the process's
+ * working directory — that differs between a Drush run, a web request and cron,
+ * so a relative path would work in one and fail in another. Resolve them to
+ * absolute paths here instead, from the module's real location.
+ */
+function movie_migrate_migration_plugins_alter(array &$migrations) {
+  $module_path = \Drupal::service('extension.list.module')->getPath('movie_migrate');
+  $prefix = \Drupal::root() . '/' . $module_path . '/';
+
+  foreach ($migrations as &$migration) {
+    if (($migration['migration_group'] ?? NULL) !== 'movies') {
+      continue;
+    }
+
+    foreach ($migration['source']['urls'] ?? [] as $delta => $url) {
+      // Leave anything already absolute, or served over a stream wrapper or
+      // protocol, exactly as it is.
+      if (!str_starts_with($url, '/') && !str_contains($url, '://')) {
+        $migration['source']['urls'][$delta] = $prefix . $url;
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+dependencies:
+  enforced:
+    module:
+    - movie_migrate
+id: movie_movies
+label: Movies
+migration_group: movies
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - data/movies.json
+  item_selector: movies
+  fields:
+  - name: id
+    label: id
+    selector: id
+  - name: title
+    label: title
+    selector: title
+  - name: year
+    label: year
+    selector: year
+  - name: body
+    label: body
+    selector: body
+  - name: trailer
+    label: trailer
+    selector: trailer
+  - name: categories
+    label: categories
+    selector: categories
+  - name: directors
+    label: directors
+    selector: directors
+  - name: actors
+    label: actors
+    selector: actors
+  ids:
+    id:
+      type: integer
+process:
+  title: title
+  field_year_of_release: year
+  body/value: body
+  body/format:
+    plugin: default_value
+    default_value: basic_html
+  field_trailer/uri: trailer
+  field_category:
+    plugin: migration_lookup
+    migration: movie_categories
+    source: categories
+    no_stub: true
+  field_director:
+    plugin: migration_lookup
+    migration: movie_directors
+    source: directors
+    no_stub: true
+  field_actor:
+    plugin: migration_lookup
+    migration: movie_actors
+    source: actors
+    no_stub: true
+  status:
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: entity:node
+  default_bundle: movie
+migration_dependencies:
+  required:
+  - movie_categories
+  - movie_directors
+  - movie_actors

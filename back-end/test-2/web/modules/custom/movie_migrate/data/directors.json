@@ -1,0 +1,24 @@
+{
+  "directors": [
+    {
+      "id": 11,
+      "title": "Ava Sinclair",
+      "bio": "A director known for tense, character-driven thrillers shot almost entirely on location."
+    },
+    {
+      "id": 12,
+      "title": "Marcus Oyelaran",
+      "bio": "Began in documentary before moving to features; celebrated for naturalistic performances."
+    },
+    {
+      "id": 13,
+      "title": "Ingrid Halvorsen",
+      "bio": "A Norwegian filmmaker whose science fiction work is preoccupied with memory and loss."
+    },
+    {
+      "id": 14,
+      "title": "Danny Whitlock",
+      "bio": "A comedy specialist who came up through sketch television."
+    }
+  ]
+}

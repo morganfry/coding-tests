@@ -1,0 +1,44 @@
+{
+  "actors": [
+    {
+      "id": 15,
+      "title": "Nadia Ferreira",
+      "bio": "A stage actor turned screen lead, best known for restrained, interior performances."
+    },
+    {
+      "id": 16,
+      "title": "Tom Barrow",
+      "bio": "A character actor with a long career in ensemble casts."
+    },
+    {
+      "id": 17,
+      "title": "Priya Raghunathan",
+      "bio": "Trained in classical dance before turning to film."
+    },
+    {
+      "id": 18,
+      "title": "Elias Vandermeer",
+      "bio": "Known for playing quietly menacing antagonists."
+    },
+    {
+      "id": 19,
+      "title": "Grace Okonkwo",
+      "bio": "A breakout talent from independent cinema."
+    },
+    {
+      "id": 20,
+      "title": "Yuki Tanaka",
+      "bio": "Moves easily between action roles and intimate drama."
+    },
+    {
+      "id": 21,
+      "title": "Rafael Duarte",
+      "bio": "A comic performer with a background in improv."
+    },
+    {
+      "id": 22,
+      "title": "Helen Marsh",
+      "bio": "A veteran of period drama and literary adaptation."
+    }
+  ]
+}

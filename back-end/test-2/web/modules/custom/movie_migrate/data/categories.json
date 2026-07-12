@@ -1,0 +1,36 @@
+{
+  "categories": [
+    {
+      "id": 3,
+      "name": "Action"
+    },
+    {
+      "id": 2,
+      "name": "Comedy"
+    },
+    {
+      "id": 1,
+      "name": "Drama"
+    },
+    {
+      "id": 7,
+      "name": "Fantasy"
+    },
+    {
+      "id": 5,
+      "name": "Horror"
+    },
+    {
+      "id": 8,
+      "name": "Musical"
+    },
+    {
+      "id": 6,
+      "name": "Science Fiction"
+    },
+    {
+      "id": 4,
+      "name": "Thriller"
+    }
+  ]
+}

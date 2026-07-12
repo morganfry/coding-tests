@@ -1,0 +1,39 @@
+dependencies:
+  enforced:
+    module:
+    - movie_migrate
+id: movie_actors
+label: Movie actors
+migration_group: movies
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - data/actors.json
+  item_selector: actors
+  fields:
+  - name: id
+    label: id
+    selector: id
+  - name: title
+    label: title
+    selector: title
+  - name: bio
+    label: bio
+    selector: bio
+  ids:
+    id:
+      type: integer
+process:
+  title: title
+  field_bio/value: bio
+  field_bio/format:
+    plugin: default_value
+    default_value: basic_html
+  status:
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: entity:node
+  default_bundle: actor

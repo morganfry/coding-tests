@@ -1,0 +1,46 @@
+dependencies:
+  enforced:
+    module:
+    - movie_migrate
+id: movie_ratings_data
+label: Movie ratings
+migration_group: movies
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - data/ratings.json
+  item_selector: ratings
+  fields:
+  - name: id
+    label: id
+    selector: id
+  - name: movie
+    label: movie
+    selector: movie
+  - name: rating
+    label: rating
+    selector: rating
+  - name: ip
+    label: ip
+    selector: ip
+  ids:
+    id:
+      type: integer
+process:
+  movie:
+    plugin: migration_lookup
+    migration: movie_movies
+    source: movie
+    no_stub: true
+  rating: rating
+  ip_address: ip
+  uid:
+    plugin: default_value
+    default_value: 0
+destination:
+  plugin: entity:movie_rating
+migration_dependencies:
+  required:
+  - movie_movies

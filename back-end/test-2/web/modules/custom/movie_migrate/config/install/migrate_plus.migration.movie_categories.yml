@@ -1,0 +1,32 @@
+dependencies:
+  enforced:
+    module:
+    - movie_migrate
+id: movie_categories
+label: Movie category terms
+migration_group: movies
+source:
+  plugin: url
+  data_fetcher_plugin: file
+  data_parser_plugin: json
+  urls:
+  - data/categories.json
+  item_selector: categories
+  fields:
+  - name: id
+    label: id
+    selector: id
+  - name: name
+    label: name
+    selector: name
+  ids:
+    id:
+      type: integer
+process:
+  name: name
+  vid:
+    plugin: default_value
+    default_value: categories
+destination:
+  plugin: entity:taxonomy_term
+  default_bundle: categories

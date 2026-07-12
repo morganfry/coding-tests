@@ -1,0 +1,11 @@
+name: 'Movie Migrate'
+type: module
+description: 'Imports the demo catalogue — category terms, directors, actors, movies and their ratings — as a single migration group.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - drupal:migrate
+  - drupal:node
+  - drupal:taxonomy
+  - migrate_plus:migrate_plus
+  - movie_ratings:movie_ratings

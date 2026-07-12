@@ -1,0 +1,16 @@
+# The enforced dependency is what makes uninstalling movie_migrate remove this
+# group again. Without it the config survives the uninstall, and re-enabling the
+# module then fails because the configuration already exists.
+dependencies:
+  enforced:
+    module:
+      - movie_migrate
+id: movies
+label: Movies
+description: 'The demo movie catalogue: category terms, directors, actors, movies and ratings.'
+source_type: 'JSON files shipped with the module'
+shared_configuration:
+  dependencies:
+    enforced:
+      module:
+        - movie_migrate
