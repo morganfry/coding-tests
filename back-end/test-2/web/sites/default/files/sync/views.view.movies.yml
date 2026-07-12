@@ -290,6 +290,57 @@ display:
           hierarchy: false
           limit: true
           error_message: true
+        field_average_rating_average:
+          id: field_average_rating_average
+          table: node__field_average_rating
+          field: field_average_rating_average
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_average_rating_average_op
+            label: 'Average Rating'
+            description: ''
+            use_operator: true
+            operator: field_average_rating_average_op
+            operator_limit_selection: true
+            operator_list:
+              '<=': '<='
+              '=': '='
+              '>=': '>='
+              between: between
+            identifier: field_average_rating_average
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: default
       row:
