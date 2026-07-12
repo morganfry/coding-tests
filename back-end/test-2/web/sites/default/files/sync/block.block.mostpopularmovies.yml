@@ -1,0 +1,24 @@
+uuid: 34793cc0-2147-46ef-b5b5-c37a253422ba
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.ratings_blocks
+  module:
+    - views
+  theme:
+    - olivero
+id: mostpopularmovies
+theme: olivero
+region: sidebar
+weight: 0
+provider: null
+plugin: 'views_block:ratings_blocks-block_1'
+settings:
+  id: 'views_block:ratings_blocks-block_1'
+  label: 'Most Popular'
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility: {  }
