@@ -63,14 +63,6 @@ interface RatingManagerInterface {
   public function updateAverage(int $nid): void;
 
   /**
-   * Recalculates the stored average of every movie that has been rated.
-   *
-   * Used to backfill averages for ratings submitted before the average rating
-   * field was added to the content type.
-   */
-  public function updateAllAverages(): void;
-
-  /**
    * Determines whether an entity is mid-save purely to refresh its average.
    *
    * Lets hook implementations tell a visitor's vote apart from an editor

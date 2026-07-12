@@ -3,6 +3,5 @@ services:
     class: Drupal\movie_ratings\RatingManager
     arguments:
       - '@entity_type.manager'
-      - '@entity_field.manager'
       - '@request_stack'
       - '@current_user'

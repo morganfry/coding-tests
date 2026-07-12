@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\movie_ratings;
 
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\RevisionableInterface;
@@ -28,8 +27,6 @@ class RatingManager implements RatingManagerInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
-   *   The entity field manager, used to locate average rating fields.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack, used to resolve the client IP address.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
@@ -37,7 +34,6 @@ class RatingManager implements RatingManagerInterface {
    */
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EntityFieldManagerInterface $entityFieldManager,
     protected readonly RequestStack $requestStack,
     protected readonly AccountProxyInterface $currentUser,
   ) {}
@@ -136,30 +132,6 @@ class RatingManager implements RatingManagerInterface {
     }
     finally {
       $this->resavingNid = NULL;
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function updateAllAverages(): void {
-    $field_map = $this->entityFieldManager->getFieldMapByFieldType('movie_rating_average');
-
-    $bundles = [];
-    foreach ($field_map['node'] ?? [] as $field_info) {
-      $bundles = array_merge($bundles, $field_info['bundles']);
-    }
-    if ($bundles === []) {
-      return;
-    }
-
-    $nids = $this->entityTypeManager->getStorage('node')->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', array_unique($bundles), 'IN')
-      ->execute();
-
-    foreach ($nids as $nid) {
-      $this->updateAverage((int) $nid);
     }
   }
 
