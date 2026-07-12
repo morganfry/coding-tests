@@ -34,22 +34,9 @@ runs PHP 8.2.
 
 ## INSTALLATION
 
-    ddev composer install          # brings in endroid/qr-code
+    ddev composer install
     ddev drush en movie_trailer_qr -y
     ddev drush cr
-
-## CONFIGURATION
-
-The exported site configuration already has this in place. To set it up from scratch:
-
-1. At *Structure → Content types → Movie → Manage fields → Add field*, add a **Link** field
-   named "Trailer". Under its settings choose **External links only** and set *Allow link
-   text* to **Disabled** — a trailer is a bare YouTube URL.
-2. On **Manage display**, set the Trailer field's format to **Trailer QR code** and its label
-   to **Hidden**. In the format settings you can change the size, the caption, and whether the
-   code is also clickable.
-
-Export any configuration changes with `ddev drush cex`.
 
 ## NOTES
 
@@ -61,7 +48,3 @@ Export any configuration changes with `ddev drush cex`.
   shows a new code on the next page load.
 - The QR code is also wrapped in a link to the trailer by default, since a visitor already at a
   desktop cannot scan their own screen.
-
-## MAINTAINERS
-
-- Morgan Fry

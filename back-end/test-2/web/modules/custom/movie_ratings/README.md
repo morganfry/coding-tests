@@ -36,35 +36,8 @@ How it fits together:
 
 Drupal core only.
 
-## INSTALLATION
-
-Install and enable as a typical custom module:
-
-    ddev drush en movie_ratings -y
-    ddev drush cr
-
-## CONFIGURATION
-
-The exported site configuration already has all of this in place. To set it up from scratch
-on another content type:
-
-1. At *Structure → Content types → … → Manage fields → Add field*, add a **Movie rating
-   average** field (label it e.g. "Average rating"). This is where the calculated average
-   is stored.
-2. On **Manage form display**, set that field to **Disabled** — it is calculated, never
-   entered by an editor.
-3. On **Manage display**, set it to **Disabled** too. The block renders the average; leaving
-   the field on the display as well would show it twice.
-4. At *Structure → Block layout*, place the **Movie ratings** block in the **Content**
-   region. In its settings choose *Maximum stars* (5), and under *Visibility → Content
-   types* tick the movie content type so the block only appears on movie pages.
-5. At *People → Permissions*, grant **Submit movie ratings** to the roles allowed to vote
-   (anonymous and authenticated, to let any visitor rate).
-
 The block owns the star scale, and passes it to the average display, so the number of stars
 a visitor can pick can never disagree with the "out of N" shown alongside the average.
-
-Export any configuration changes with `ddev drush cex`.
 
 ### Flood control (bot protection)
 
@@ -88,45 +61,11 @@ Notes:
   DDEV's router without them, every visitor would look like the same IP and share one allowance.
 - Expired flood entries are cleared by cron.
 
-### Viewing ratings in Views
-
-Because ratings are a content entity, they appear in Views as the **Movie rating** base
-table. The `movie` reference provides a relationship to the movie node (and from there to
-its category, actors and directors), and `rating`, `created`, `ip_address` and the author
-are available as fields, filters and sorts.
-
-The average field adds **Average rating** and its vote count to the ordinary **Content**
-base table as a field, filter and sort — so a movie listing filtered or ordered by star
-rating is built entirely in the Views UI, with no extra code. Build a listing at *Structure
-→ Views* and export it with `ddev drush cex`.
-
-### The left sidebar: "Most Popular" and "Top Rated"
-
-The two top-5 lists are **Views blocks**, not module code — they are possible only because the
-average and vote count are real columns on the node (see the field type above):
-
-- `views.view.ratings_blocks` → `block_1` **Most Popular**, sorted by vote count descending
-- `views.view.ratings_blocks` → `block_2` **Top Rated**, sorted by average rating descending
-
-Both are capped at 5 rows and placed in the **Sidebar** region.
-
-#### Why there is a custom theme
+#### Custom theme
 
 Olivero ships a **single** sidebar region and positions it to the **right** of the content
 (`core/themes/olivero/css/layout/layout-sidebar.css` puts the content at grid column `3 / 11`
-and the sidebar at `12 / 15`). There is no "left sidebar" region to choose in Block layout, so
-the requirement for a *left* sidebar is met with a small Olivero subtheme:
-
-    web/themes/custom/movies_theme/
-    ├── movies_theme.info.yml          # base theme: olivero
-    ├── movies_theme.libraries.yml
-    └── css/layout/sidebar-left.css    # mirrors the grid: sidebar 3/6, content 7/15
-
-The stylesheet overrides only the wide breakpoint (below it Olivero stacks both regions full
-width, where "left" has no meaning). It also pins both regions to `grid-row: 1`, because the
-sidebar markup comes *after* `<main>` in the page template — without that, CSS grid
-auto-placement drops a left-hand sidebar onto a second row instead of seating it beside the
-content.
+and the sidebar at `12 / 15`). This custom theme moves the sidebar to the right by changing the gird columns of those regions.
 
 ### Notes
 
