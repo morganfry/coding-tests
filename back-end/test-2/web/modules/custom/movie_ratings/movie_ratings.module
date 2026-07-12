@@ -15,8 +15,9 @@ use Drupal\node\NodeInterface;
 function movie_ratings_help($route_name, RouteMatchInterface $route_match) {
   if ($route_name === 'help.page.movie_ratings') {
     $output = '<h3>' . t('About') . '</h3>';
-    $output .= '<p>' . t("Provides a \"Movie rating\" field that renders an interactive 1–5 star rating control on a movie page. Each submitted vote is saved as a movie_rating content entity together with the submitter's IP address.") . '</p>';
-    $output .= '<p>' . t('An accompanying "Movie rating average" field stores each movie\'s average rating and vote count, so the average can be displayed on the movie page and used as a field, filter or sort in Views.') . '</p>';
+    $output .= '<p>' . t("Provides a \"Movie ratings\" block that shows a movie's average rating as stars and offers visitors an interactive star rating form. Each submitted vote is saved as a movie_rating content entity together with the submitter's IP address.") . '</p>';
+    $output .= '<p>' . t('A "Movie rating average" field on the content type stores each movie\'s average rating and vote count. The block renders it, and because it is a real field it is also available as a field, filter and sort in Views.') . '</p>';
+    $output .= '<p>' . t('Place the block at <em>Structure → Block layout</em>, set the maximum number of stars in its settings, and limit it to movie pages with a "Content type" visibility condition.') . '</p>';
     return $output;
   }
 }

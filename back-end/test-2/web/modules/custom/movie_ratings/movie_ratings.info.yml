@@ -4,6 +4,7 @@ description: 'Lets visitors rate movies 1–5 stars on the movie page; each vote
 package: Custom
 core_version_requirement: ^10 || ^11
 dependencies:
+  - drupal:block
   - drupal:node
   - drupal:field
   - drupal:user

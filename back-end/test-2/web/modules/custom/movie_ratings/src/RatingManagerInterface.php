@@ -84,4 +84,20 @@ interface RatingManagerInterface {
    */
   public function isAverageResave(FieldableEntityInterface $entity): bool;
 
+  /**
+   * Finds the entity's field that stores an average rating, if it has one.
+   *
+   * The field is matched on the field type this module defines, not on a field
+   * machine name, so a site builder can name the field whatever they like and
+   * add it to any content type without touching this code.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to inspect.
+   *
+   * @return string|null
+   *   The machine name of the average rating field, or NULL if the entity has
+   *   none.
+   */
+  public function getAverageFieldName(FieldableEntityInterface $entity): ?string;
+
 }

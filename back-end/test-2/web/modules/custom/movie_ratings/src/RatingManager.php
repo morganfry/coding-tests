@@ -110,20 +110,18 @@ class RatingManager implements RatingManagerInterface {
       return;
     }
 
-    $field_names = $this->averageFieldNames($node);
-    if ($field_names === []) {
+    $field_name = $this->getAverageFieldName($node);
+    if ($field_name === NULL) {
       // Content types other than Movie carry no average rating field.
       return;
     }
 
     $average = $this->getAverage($nid);
 
-    foreach ($field_names as $field_name) {
-      $node->set($field_name, [
-        'average' => $average['average'],
-        'votes' => $average['votes'],
-      ]);
-    }
+    $node->set($field_name, [
+      'average' => $average['average'],
+      'votes' => $average['votes'],
+    ]);
 
     if ($node instanceof RevisionableInterface) {
       // A visitor's vote is not an editorial revision of the movie.
@@ -175,26 +173,15 @@ class RatingManager implements RatingManagerInterface {
   }
 
   /**
-   * Lists the entity's fields that store an average rating.
-   *
-   * Fields are matched on the field type this module defines, not on a field
-   * machine name, so a site builder can name the field whatever they like and
-   * add it to any content type without touching this code.
-   *
-   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
-   *   The entity to inspect.
-   *
-   * @return string[]
-   *   The machine names of the entity's movie_rating_average fields.
+   * {@inheritdoc}
    */
-  protected function averageFieldNames(FieldableEntityInterface $entity): array {
-    $field_names = [];
+  public function getAverageFieldName(FieldableEntityInterface $entity): ?string {
     foreach ($entity->getFieldDefinitions() as $field_name => $definition) {
       if ($definition->getType() === 'movie_rating_average') {
-        $field_names[] = $field_name;
+        return $field_name;
       }
     }
-    return $field_names;
+    return NULL;
   }
 
 }

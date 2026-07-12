@@ -167,7 +167,7 @@ final class RatingForm extends FormBase {
     // graphic elsewhere on the page would keep showing the pre-vote figure
     // until the visitor reloaded.
     if ($form_state->get('feedback') === 'thanks') {
-      $average = $this->buildAverage($nid);
+      $average = $this->buildAverage($nid, (int) $form_state->get('max_stars'));
       if ($average !== []) {
         $response->addCommand(new ReplaceCommand('[data-movie-rating-average="' . $nid . '"]', $average));
       }
@@ -195,29 +195,38 @@ final class RatingForm extends FormBase {
   /**
    * Re-renders a movie's average rating field.
    *
-   * The field is rendered through its configured formatter rather than rebuilt
-   * by hand, so the AJAX replacement matches what a page load would produce.
+   * The field is rendered through its formatter rather than rebuilt by hand, so
+   * the AJAX replacement matches what a page load produces. The display options
+   * are passed explicitly rather than naming a view mode: the field is hidden
+   * on the movie's display (the Movie ratings block is the one place the rating
+   * UI appears), so resolving it through the view display would render nothing
+   * and the star graphic would silently stop updating after a vote.
    *
    * @param int $nid
    *   The movie node ID.
+   * @param int $max_stars
+   *   The star scale the average is shown against.
    *
    * @return array
    *   The average rating render array, or an empty array if the movie has no
    *   average rating field.
    */
-  private function buildAverage(int $nid): array {
+  private function buildAverage(int $nid, int $max_stars): array {
     $node = $this->entityTypeManager->getStorage('node')->load($nid);
     if (!$node instanceof FieldableEntityInterface) {
       return [];
     }
 
-    foreach ($node->getFieldDefinitions() as $field_name => $definition) {
-      if ($definition->getType() === 'movie_rating_average') {
-        return $node->get($field_name)->view('default');
-      }
+    $field_name = $this->ratingManager->getAverageFieldName($node);
+    if ($field_name === NULL) {
+      return [];
     }
 
-    return [];
+    return $node->get($field_name)->view([
+      'type' => 'movie_rating_average',
+      'label' => 'hidden',
+      'settings' => ['max_stars' => $max_stars],
+    ]);
   }
 
 }
