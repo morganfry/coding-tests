@@ -158,7 +158,7 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: 'Block 1'
+    display_title: 'Most Popular'
     display_plugin: block
     position: 1
     display_options:
@@ -174,7 +174,7 @@ display:
       tags: {  }
   block_2:
     id: block_2
-    display_title: 'Block 2'
+    display_title: 'Top Rated'
     display_plugin: block
     position: 2
     display_options:
@@ -196,6 +196,7 @@ display:
       defaults:
         title: false
         sorts: false
+      display_description: ''
       display_extenders: {  }
     cache_metadata:
       max-age: -1
