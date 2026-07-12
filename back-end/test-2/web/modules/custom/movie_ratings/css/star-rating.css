@@ -29,6 +29,45 @@
   outline-offset: 2px;
 }
 
+.movie-rating-average {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 1rem 0;
+}
+
+/* The two star rows are stacked, so they must occupy the same box. */
+.movie-rating-average__stars {
+  position: relative;
+  display: inline-block;
+  font-size: 1.5rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.movie-rating-average__stars-empty {
+  color: #c9ccd1;
+}
+
+/* Clipped to the average's percentage width, giving partial stars. */
+.movie-rating-average__stars-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  color: #f5b301;
+  white-space: nowrap;
+}
+
+.movie-rating-average__value {
+  font-weight: 700;
+}
+
+.movie-rating-average__votes,
+.movie-rating-average__empty {
+  color: #545560;
+}
+
 .movie-rating-form__thanks {
   font-weight: 700;
   color: #1a7f37;

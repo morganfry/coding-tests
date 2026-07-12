@@ -1,0 +1,19 @@
+uuid: 8dcb7d77-cc30-43bd-9bd7-bd499577355c
+langcode: en
+status: true
+dependencies:
+  module:
+    - movie_ratings
+    - node
+id: node.field_average_rating
+field_name: field_average_rating
+entity_type: node
+type: movie_rating_average
+settings: {  }
+module: movie_ratings
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

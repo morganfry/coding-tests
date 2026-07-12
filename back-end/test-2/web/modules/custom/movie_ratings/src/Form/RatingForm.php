@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\movie_ratings\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\movie_ratings\RatingManagerInterface;
@@ -19,9 +23,12 @@ final class RatingForm extends FormBase {
    *
    * @param \Drupal\movie_ratings\RatingManagerInterface $ratingManager
    *   The rating manager.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager, used to re-render the movie's average rating.
    */
   public function __construct(
     protected RatingManagerInterface $ratingManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -30,6 +37,7 @@ final class RatingForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new self(
       $container->get('movie_ratings.rating_manager'),
+      $container->get('entity_type.manager'),
     );
   }
 
@@ -57,7 +65,7 @@ final class RatingForm extends FormBase {
     $form_state->set('movie_nid', $nid);
     $form_state->set('max_stars', $max_stars);
 
-    $wrapper_id = 'movie-rating-form-' . (int) $nid;
+    $wrapper_id = $this->wrapperId((int) $nid);
     $form['#prefix'] = '<div id="' . $wrapper_id . '" class="movie-rating-form">';
     $form['#suffix'] = '</div>';
 
@@ -139,18 +147,77 @@ final class RatingForm extends FormBase {
   }
 
   /**
-   * AJAX callback returning the refreshed form wrapper.
+   * AJAX callback refreshing the form, and the average rating it just changed.
    *
    * @param array $form
    *   The rebuilt form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    *
-   * @return array
-   *   The form render array to replace the wrapper with.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   Commands replacing the form, and the movie's average rating display.
    */
   public function ajaxRefresh(array &$form, FormStateInterface $form_state) {
-    return $form;
+    $nid = (int) $form_state->get('movie_nid');
+
+    $response = new AjaxResponse();
+    $response->addCommand(new ReplaceCommand('#' . $this->wrapperId($nid), $form));
+
+    // A new vote moves the average, so refresh it too. Without this the star
+    // graphic elsewhere on the page would keep showing the pre-vote figure
+    // until the visitor reloaded.
+    if ($form_state->get('feedback') === 'thanks') {
+      $average = $this->buildAverage($nid);
+      if ($average !== []) {
+        $response->addCommand(new ReplaceCommand('[data-movie-rating-average="' . $nid . '"]', $average));
+      }
+    }
+
+    return $response;
+  }
+
+  /**
+   * Builds the DOM id of a movie's rating form wrapper.
+   *
+   * One movie page can hold several rating forms, so the id carries the node
+   * ID to keep each form's AJAX replacement targeted at its own wrapper.
+   *
+   * @param int $nid
+   *   The movie node ID.
+   *
+   * @return string
+   *   The wrapper element id.
+   */
+  private function wrapperId(int $nid): string {
+    return 'movie-rating-form-' . $nid;
+  }
+
+  /**
+   * Re-renders a movie's average rating field.
+   *
+   * The field is rendered through its configured formatter rather than rebuilt
+   * by hand, so the AJAX replacement matches what a page load would produce.
+   *
+   * @param int $nid
+   *   The movie node ID.
+   *
+   * @return array
+   *   The average rating render array, or an empty array if the movie has no
+   *   average rating field.
+   */
+  private function buildAverage(int $nid): array {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    if (!$node instanceof FieldableEntityInterface) {
+      return [];
+    }
+
+    foreach ($node->getFieldDefinitions() as $field_name => $definition) {
+      if ($definition->getType() === 'movie_rating_average') {
+        return $node->get($field_name)->view('default');
+      }
+    }
+
+    return [];
   }
 
 }

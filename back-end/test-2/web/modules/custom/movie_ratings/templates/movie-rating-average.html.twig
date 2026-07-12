@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Displays a movie's average rating as stars plus the value and vote count.
+ *
+ * The filled star row is layered over the empty row and clipped to a percentage
+ * width, so a fractional average such as 4.2 renders as a partly filled star
+ * without needing half-star glyphs or JavaScript.
+ *
+ * Available variables:
+ * - average: The average rating, or NULL when nobody has voted yet.
+ * - average_display: The average formatted for display, e.g. "4.2".
+ * - votes: The number of ratings submitted.
+ * - max_stars: The highest rating a visitor can give.
+ * - percent: The average as a percentage of max_stars.
+ * - nid: The movie node ID. Used by the rating form to refresh this element.
+ */
+#}
+<div class="movie-rating-average" data-movie-rating-average="{{ nid }}">
+  <span class="movie-rating-average__stars" aria-hidden="true">
+    <span class="movie-rating-average__stars-empty">
+      {%- for star in 1..max_stars -%}☆{%- endfor -%}
+    </span>
+    <span class="movie-rating-average__stars-full" style="width: {{ percent }}%">
+      {%- for star in 1..max_stars -%}★{%- endfor -%}
+    </span>
+  </span>
+  {% if votes %}
+    <span class="movie-rating-average__value">{{ '@average out of @max'|t({'@average': average_display, '@max': max_stars}) }}</span>
+    <span class="movie-rating-average__votes">
+      {%- trans -%}(1 vote){%- plural votes -%}(@count votes){%- endtrans -%}
+    </span>
+    <span class="visually-hidden">
+      {%- trans -%}Average rating: {{ average_display }} out of {{ max_stars }}, based on 1 vote.{%- plural votes -%}Average rating: {{ average_display }} out of {{ max_stars }}, based on @count votes.{%- endtrans -%}
+    </span>
+  {% else %}
+    <span class="movie-rating-average__empty">{{ 'No ratings yet'|t }}</span>
+  {% endif %}
+</div>

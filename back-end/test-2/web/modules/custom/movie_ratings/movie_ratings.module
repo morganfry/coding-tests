@@ -6,6 +6,8 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\movie_ratings\Entity\MovieRatingInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_help().
@@ -14,6 +16,78 @@ function movie_ratings_help($route_name, RouteMatchInterface $route_match) {
   if ($route_name === 'help.page.movie_ratings') {
     $output = '<h3>' . t('About') . '</h3>';
     $output .= '<p>' . t("Provides a \"Movie rating\" field that renders an interactive 1–5 star rating control on a movie page. Each submitted vote is saved as a movie_rating content entity together with the submitter's IP address.") . '</p>';
+    $output .= '<p>' . t('An accompanying "Movie rating average" field stores each movie\'s average rating and vote count, so the average can be displayed on the movie page and used as a field, filter or sort in Views.') . '</p>';
     return $output;
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function movie_ratings_theme() {
+  return [
+    'movie_rating_average' => [
+      'variables' => [
+        'average' => NULL,
+        'average_display' => '',
+        'votes' => 0,
+        'max_stars' => 5,
+        'percent' => 0,
+        'nid' => 0,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for movie_rating entities.
+ */
+function movie_ratings_movie_rating_insert(MovieRatingInterface $movie_rating) {
+  _movie_ratings_refresh_average($movie_rating);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for movie_rating entities.
+ */
+function movie_ratings_movie_rating_update(MovieRatingInterface $movie_rating) {
+  _movie_ratings_refresh_average($movie_rating);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete() for movie_rating entities.
+ */
+function movie_ratings_movie_rating_delete(MovieRatingInterface $movie_rating) {
+  _movie_ratings_refresh_average($movie_rating);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for node entities.
+ */
+function movie_ratings_node_presave(NodeInterface $node) {
+  /** @var \Drupal\movie_ratings\RatingManagerInterface $rating_manager */
+  $rating_manager = \Drupal::service('movie_ratings.rating_manager');
+
+  // Core's ChangedItem has already stamped the current time onto the node by
+  // the time this hook runs. When the only reason for the save is a visitor's
+  // vote, put the editorial timestamp back: rating a movie does not change the
+  // movie, and should not reorder listings sorted by when content was updated.
+  if ($rating_manager->isAverageResave($node) && $node->original !== NULL) {
+    $node->setChangedTime($node->original->getChangedTime());
+  }
+}
+
+/**
+ * Recalculates the stored average of the movie a rating belongs to.
+ *
+ * Hooking the rating entity rather than the rating form means the average stays
+ * correct no matter how the rating was created, changed or removed.
+ *
+ * @param \Drupal\movie_ratings\Entity\MovieRatingInterface $movie_rating
+ *   The rating that was saved or deleted.
+ */
+function _movie_ratings_refresh_average(MovieRatingInterface $movie_rating) {
+  $nid = $movie_rating->getMovieId();
+  if ($nid !== NULL) {
+    \Drupal::service('movie_ratings.rating_manager')->updateAverage($nid);
   }
 }

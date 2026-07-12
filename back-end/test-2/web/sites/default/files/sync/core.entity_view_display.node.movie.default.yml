@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.movie.body
     - field.field.node.movie.field_actor
+    - field.field.node.movie.field_average_rating
     - field.field.node.movie.field_category
     - field.field.node.movie.field_director
     - field.field.node.movie.field_movie_rating
@@ -24,7 +25,7 @@ content:
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
   field_actor:
     type: entity_reference_label
@@ -32,7 +33,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 4
+    weight: 5
+    region: content
+  field_average_rating:
+    type: movie_rating_average
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
   field_category:
     type: entity_reference_label
@@ -48,14 +56,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   field_movie_rating:
     type: movie_rating_form
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_year_of_release:
     type: number_integer
@@ -64,7 +72,7 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 3
+    weight: 1
     region: content
   links:
     settings: {  }

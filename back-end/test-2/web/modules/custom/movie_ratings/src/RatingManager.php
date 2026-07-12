@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\movie_ratings;
 
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -14,10 +17,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class RatingManager implements RatingManagerInterface {
 
   /**
+   * ID of the node currently being re-saved to refresh its average, if any.
+   *
+   * @var int|null
+   */
+  protected ?int $resavingNid = NULL;
+
+  /**
    * Constructs a RatingManager object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager, used to locate average rating fields.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack, used to resolve the client IP address.
    * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
@@ -25,6 +37,7 @@ class RatingManager implements RatingManagerInterface {
    */
   public function __construct(
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly EntityFieldManagerInterface $entityFieldManager,
     protected readonly RequestStack $requestStack,
     protected readonly AccountProxyInterface $currentUser,
   ) {}
@@ -46,6 +59,8 @@ class RatingManager implements RatingManagerInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * Checks Authenticated users by uid and Anonymous by ip address.
    */
   public function hasRated(int $nid): bool {
     $query = $this->entityTypeManager->getStorage('movie_rating')->getQuery()
@@ -63,6 +78,123 @@ class RatingManager implements RatingManagerInterface {
     }
 
     return (bool) $query->count()->execute();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAverage(int $nid): array {
+    $query = $this->entityTypeManager->getStorage('movie_rating')
+      ->getAggregateQuery()
+      ->accessCheck(FALSE)
+      ->condition('movie', $nid)
+      ->aggregate('rating', 'AVG', NULL, $average_alias)
+      ->aggregate('rating', 'COUNT', NULL, $count_alias);
+
+    $result = $query->execute();
+    $row = $result[0] ?? [];
+    $votes = (int) ($row[$count_alias] ?? 0);
+
+    return [
+      'average' => $votes > 0 ? round((float) $row[$average_alias], 1) : NULL,
+      'votes' => $votes,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateAverage(int $nid): void {
+    $node = $this->entityTypeManager->getStorage('node')->load($nid);
+    if (!$node instanceof FieldableEntityInterface) {
+      return;
+    }
+
+    $field_names = $this->averageFieldNames($node);
+    if ($field_names === []) {
+      // Content types other than Movie carry no average rating field.
+      return;
+    }
+
+    $average = $this->getAverage($nid);
+
+    foreach ($field_names as $field_name) {
+      $node->set($field_name, [
+        'average' => $average['average'],
+        'votes' => $average['votes'],
+      ]);
+    }
+
+    if ($node instanceof RevisionableInterface) {
+      // A visitor's vote is not an editorial revision of the movie.
+      $node->setNewRevision(FALSE);
+    }
+
+    // Flagged so movie_ratings_node_presave() can tell this save apart from an
+    // editor's and leave the movie's changed timestamp alone.
+    $this->resavingNid = $nid;
+    try {
+      $node->save();
+    }
+    finally {
+      $this->resavingNid = NULL;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function updateAllAverages(): void {
+    $field_map = $this->entityFieldManager->getFieldMapByFieldType('movie_rating_average');
+
+    $bundles = [];
+    foreach ($field_map['node'] ?? [] as $field_info) {
+      $bundles = array_merge($bundles, $field_info['bundles']);
+    }
+    if ($bundles === []) {
+      return;
+    }
+
+    $nids = $this->entityTypeManager->getStorage('node')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', array_unique($bundles), 'IN')
+      ->execute();
+
+    foreach ($nids as $nid) {
+      $this->updateAverage((int) $nid);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isAverageResave(FieldableEntityInterface $entity): bool {
+    return $this->resavingNid !== NULL
+      && $entity->getEntityTypeId() === 'node'
+      && (int) $entity->id() === $this->resavingNid;
+  }
+
+  /**
+   * Lists the entity's fields that store an average rating.
+   *
+   * Fields are matched on the field type this module defines, not on a field
+   * machine name, so a site builder can name the field whatever they like and
+   * add it to any content type without touching this code.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity to inspect.
+   *
+   * @return string[]
+   *   The machine names of the entity's movie_rating_average fields.
+   */
+  protected function averageFieldNames(FieldableEntityInterface $entity): array {
+    $field_names = [];
+    foreach ($entity->getFieldDefinitions() as $field_name => $definition) {
+      if ($definition->getType() === 'movie_rating_average') {
+        $field_names[] = $field_name;
+      }
+    }
+    return $field_names;
   }
 
 }

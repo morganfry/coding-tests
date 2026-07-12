@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.movie.body
     - field.field.node.movie.field_actor
+    - field.field.node.movie.field_average_rating
     - field.field.node.movie.field_category
     - field.field.node.movie.field_director
     - field.field.node.movie.field_movie_rating
@@ -34,6 +35,7 @@ content:
     region: content
 hidden:
   field_actor: true
+  field_average_rating: true
   field_category: true
   field_director: true
   field_movie_rating: true

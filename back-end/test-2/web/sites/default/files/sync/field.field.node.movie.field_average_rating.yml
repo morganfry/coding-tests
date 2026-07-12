@@ -1,0 +1,21 @@
+uuid: 6f2de31a-5fec-4566-8fc7-a922ccfc11ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_average_rating
+    - node.type.movie
+  module:
+    - movie_ratings
+id: node.movie.field_average_rating
+field_name: field_average_rating
+entity_type: node
+bundle: movie
+label: 'Average rating'
+description: 'Calculated automatically from submitted ratings.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: movie_rating_average
