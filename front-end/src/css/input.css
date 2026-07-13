@@ -1,3 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  /* The button and feature-list patterns repeat a dozen times across the four
+     pricing cards and the footer, so they live here rather than being pasted
+     inline. Everything else on the page is styled with utilities directly.
+     .btn is also the hook the viewport script uses to tag anchors that are
+     styled as buttons (see src/js/index.js). */
+  .btn {
+    @apply inline-flex items-center justify-center rounded px-6 py-2.5 text-center text-[15px] font-semibold leading-6 transition-colors duration-150;
+  }
+
+  .btn-primary {
+    @apply bg-dark-teal text-white hover:bg-[#006974];
+  }
+
+  .btn-outline {
+    @apply border border-teal bg-white text-dark-teal hover:bg-teal/5;
+  }
+
+  .btn-ghost {
+    @apply border border-white/70 text-white hover:bg-white/10;
+  }
+
+  /* Checkmark bullet used in every pricing card feature list. */
+  .feature-item {
+    @apply flex items-start gap-2 text-[13px] leading-5 text-charcoal;
+  }
+}
