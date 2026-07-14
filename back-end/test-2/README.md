@@ -1,10 +1,10 @@
 # Back end Drupal Coding Test 2
 
-To set up the project please fork this GitHub repository to your personal account.  
+To set up the project please fork this GitHub repository to your personal account.
 
 We use Docker Desktop and DDEV for Drupal our local development. If you prefer a different local development enviroment, please use what you are comfortable with or already have set up.
 
-To install Docker and DDEV please follow their instructions here: 
+To install Docker and DDEV please follow their instructions here:
 * [Docker](https://ddev.readthedocs.io/en/latest/users/install/docker-installation/)
 * [DDEV](https://ddev.readthedocs.io/en/latest/users/install/ddev-installation/)
 
@@ -49,3 +49,16 @@ Once you’re done, double and triple check your code, including code style to m
 Email a link back to your repository for us to review. We should be able to clone it locally, run the ddev commands above plus any commands in the module's README.md file to see your work.
 
 You have 48 hours from now to return this exercise back to us. Good luck, and feel free to reach out with any questions!
+
+# Installation for testing completed submission
+
+Run ddev site install with current configuration, then migrate in the demo content as follows:
+
+```
+cd back-end/test-2
+ddev start
+ddev composer install
+ddev drush site:install minimal --existing-config --account-name=admin --account-pass=admin -y
+ddev drush mim --group=movies
+ddev launch
+```
